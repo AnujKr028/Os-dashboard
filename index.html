@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced OS Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .flash { animation: flash-animation 0.5s ease-out; }
+    @keyframes flash-animation {
+      0% { background-color: rgba(239, 68, 68, 0.7); }
+      100% { background-color: transparent; }
+    }
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      background-color: #374151;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <div class="container mx-auto px-4 py-6">
+    <header class="flex flex-col md:flex-row justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold mb-4 md:mb-0">
+        <i class="fas fa-microchip mr-2"></i> Advanced OS Dashboard
+      </h1>
+      <div class="flex space-x-4">
+        <div id="systemInfoButton" class="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer flex items-center">
+          <i class="fas fa-info-circle mr-2"></i> System Info
+        </div>
+        <select id="sortSelect" class="bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="cpu">Sort by CPU</option>
+          <option value="ram">Sort by RAM</option>
+          <option value="name">Sort by Name</option>
+          <option value="pid">Sort by PID</option>
+        </select>
+        <div class="relative">
+          <input id="searchInput" type="text" placeholder="Search processes..." class="bg-gray-700 text-white px-4 py-2 pl-10 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <span class="absolute left-3 top-2.5 text-gray-400">
+            <i class="fas fa-search"></i>
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- System Usage Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <!-- CPU Usage -->
+      <div class="bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+        <div class="flex justify-between mb-2">
+          <h2 class="text-xl font-semibold"><i class="fas fa-microchip mr-2"></i>CPU Usage</h2>
+          <span id="cpuDetails" class="text-gray-400"></span>
+        </div>
+        <div class="w-full bg-gray-700 h-6 rounded-full">
+          <div id="cpuBar" class="h-6 bg-gradient-to-r from-green-500 to-green-400 rounded-full text-xs flex items-center justify-center font-bold">0%</div>
+        </div>
+      </div>
+
+      <!-- RAM Usage -->
+      <div class="bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+        <div class="flex justify-between mb-2">
+          <h2 class="text-xl font-semibold"><i class="fas fa-memory mr-2"></i>RAM Usage</h2>
+          <span id="ramDetails" class="text-gray-400"></span>
+        </div>
+        <div class="w-full bg-gray-700 h-6 rounded-full">
+          <div id="ramBar" class="h-6 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full text-xs flex items-center justify-center font-bold">0%</div>
+        </div>
+      </div>
+
+      <!-- Disk Usage -->
+      <div class="bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+        <div class="flex justify-between mb-2">
+          <h2 class="text-xl font-semibold"><i class="fas fa-hdd mr-2"></i>Disk Usage</h2>
+          <span id="diskDetails" class="text-gray-400"></span>
+        </div>
+        <div class="w-full bg-gray-700 h-6 rounded-full">
+          <div id="diskBar" class="h-6 bg-gradient-to-r from-purple-500 to-purple-400 rounded-full text-xs flex items-center justify-center font-bold">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Processes Table -->
+    <div class="bg-gray-800 p-4 rounded-xl shadow-lg mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold"><i class="fas fa-list-ul mr-2"></i>Running Processes</h2>
+        <div id="processCount" class="px-3 py-1 bg-gray-700 rounded-full text-sm"></div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full table-auto text-sm">
+          <thead>
+            <tr class="text-left text-gray-400 border-b border-gray-700">
+              <th class="p-2">PID</th>
+              <th class="p-2">Process Name</th>
+              <th class="p-2">Status</th>
+              <th class="p-2">User</th>
+              <th class="p-2">CPU (%)</th>
+              <th class="p-2">RAM (MB)</th>
+              <th class="p-2">Action</th>
+            </tr>
+          </thead>
+          <tbody id="processTable" class="text-white">
+            <tr>
+              <td colspan="7" class="text-center p-6 text-gray-500">Loading processes...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Alerts Section -->
+    <div id="alertsContainer" class="mb-6 hidden">
+      <div class="bg-red-900/40 border border-red-800 p-4 rounded-xl">
+        <h2 class="text-xl font-semibold mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>System Alerts</h2>
+        <ul id="alertsList" class="space-y-2 text-sm">
+          <!-- Alerts will be added here -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+ <!-- System Info Section (Initially Hidden) -->
+<div id="systemInfoSection" class="bg-[#1e1e2f] p-6 rounded-2xl shadow-xl mb-6 text-white hidden font-sans">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold flex items-center gap-2">
+      <i class="fas fa-circle-info text-blue-400"></i> System Information
+    </h2>
+    <button id="closeInfoSection" class="text-gray-400 hover:text-white">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div id="systemInfoContent" class="space-y-5 text-sm text-gray-200">
+    <div class="bg-[#2a2a3d] p-4 rounded-xl">
+      <h4 class="text-blue-300 font-semibold mb-2">System</h4>
+      <div class="grid grid-cols-2 gap-y-2">
+        <div>Platform:</div><div id="siPlatform" class="font-mono text-right">-</div>
+        <div>Uptime:</div><div id="siUptime" class="font-mono text-right">-</div>
+        <div>Boot Time:</div><div id="siBootTime" class="font-mono text-right">-</div>
+      </div>
+    </div>
+
+    <div class="bg-[#2a2a3d] p-4 rounded-xl">
+      <h4 class="text-green-300 font-semibold mb-2">CPU</h4>
+      <div class="grid grid-cols-2 gap-y-2">
+        <div>Model:</div><div id="siCpuModel" class="font-mono text-right">-</div>
+        <div>Physical Cores:</div><div id="siPhysicalCores" class="font-mono text-right">-</div>
+        <div>Logical Cores:</div><div id="siLogicalCores" class="font-mono text-right">-</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <script src="app.js"></script>
+</body>
+</html>
