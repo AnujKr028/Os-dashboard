@@ -60,7 +60,7 @@ def get_processes():
 @app.route('/api/usage')
 def get_usage():
     try:
-        cpu = psutil.cpu_percent(interval=0.1)
+        cpu = psutil.cpu_percent(interval=1)
         ram = psutil.virtual_memory()
         disk = psutil.disk_usage('/')
         
@@ -87,7 +87,7 @@ def get_usage():
         }), 500
 
 
-ALLOWED_TERMINATE = ["chrome.exe", "notepad.exe", "python.exe"]
+ALLOWED_TERMINATE = ["chrome.exe", "notepad.exe", "python.exe", "msedge.exe"]
 
 @app.route('/api/terminate/<int:pid>', methods=['POST'])
 def terminate_process(pid):

@@ -1,5 +1,3 @@
-
-
 // Global state
 let processes = [];
 let alerts = [];
@@ -8,6 +6,21 @@ let searchTerm = '';
 
 // Elements
 const systemInfoButton = document.getElementById('systemInfoButton');
+
+systemInfoButton.addEventListener('click', () => {
+  const systemInfoSection = document.getElementById('systemInfoSection');
+  systemInfoSection.classList.remove('hidden');
+
+  // Smooth scroll to the system info section
+  systemInfoSection.scrollIntoView({ 
+    behavior: 'smooth',
+    block: 'end'
+  });
+
+  // Fetch system info on open
+  fetchSystemInfo();
+});
+
 const systemInfoModal = document.getElementById('systemInfoSection');
 const closeModalButton = document.getElementById('closeInfoSection');
 const sortSelect = document.getElementById('sortSelect');
@@ -31,6 +44,34 @@ sortSelect.addEventListener('change', (e) => {
 searchInput.addEventListener('input', (e) => {
   searchTerm = e.target.value.toLowerCase();
   renderProcessTable(processes);
+});
+
+// Add this code to handle theme toggling
+const themeToggleButton = document.getElementById('themeToggleButton');
+
+// Check and apply saved theme preference
+document.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+    themeToggleButton.innerHTML = '<i class="fas fa-moon mr-2"></i> Toggle Theme';
+  }
+});
+
+themeToggleButton.addEventListener('click', () => {
+  const body = document.body;
+  body.classList.toggle('light-mode');
+
+  // Save the user's preference
+  const theme = body.classList.contains('light-mode') ? 'light' : 'dark';
+  localStorage.setItem('theme', theme);
+
+  // Update the icon and text
+  if (theme === 'light') {
+    themeToggleButton.innerHTML = '<i class="fas fa-moon mr-2"></i> Toggle Theme';
+  } else {
+    themeToggleButton.innerHTML = '<i class="fas fa-sun mr-2"></i> Toggle Theme';
+  }
 });
 
 // Fetch system usage data

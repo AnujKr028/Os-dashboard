@@ -7,6 +7,33 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --bg-color-dark: #1a202c;
+      --text-color-dark: #ffffff;
+      --card-bg-dark: #2d3748;
+      --bg-color-light: #f7fafc;
+      --text-color-light: #1a202c;
+      --card-bg-light: #ffffff;
+    }
+
+    body {
+      background-color: var(--bg-color-dark);
+      color: var(--text-color-dark);
+    }
+
+    .card {
+      background-color: var(--card-bg-dark);
+    }
+
+    body.light-mode {
+      background-color: var(--bg-color-light);
+      color: var(--text-color-light);
+    }
+
+    body.light-mode .card {
+      background-color: var(--card-bg-light);
+    }
+
     .flash { animation: flash-animation 0.5s ease-out; }
     @keyframes flash-animation {
       0% { background-color: rgba(239, 68, 68, 0.7); }
@@ -47,6 +74,9 @@
         <div id="systemInfoButton" class="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer flex items-center">
           <i class="fas fa-info-circle mr-2"></i> System Info
         </div>
+        <div id="themeToggleButton" class="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer flex items-center">
+          <i class="fas fa-sun mr-2"></i> Toggle Theme
+        </div>
         <select id="sortSelect" class="bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option value="cpu">Sort by CPU</option>
           <option value="ram">Sort by RAM</option>
@@ -65,7 +95,7 @@
     <!-- System Usage Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
       <!-- CPU Usage -->
-      <div class="bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+      <div class="card p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
         <div class="flex justify-between mb-2">
           <h2 class="text-xl font-semibold"><i class="fas fa-microchip mr-2"></i>CPU Usage</h2>
           <span id="cpuDetails" class="text-gray-400"></span>
@@ -76,7 +106,7 @@
       </div>
 
       <!-- RAM Usage -->
-      <div class="bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+      <div class="card p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
         <div class="flex justify-between mb-2">
           <h2 class="text-xl font-semibold"><i class="fas fa-memory mr-2"></i>RAM Usage</h2>
           <span id="ramDetails" class="text-gray-400"></span>
@@ -87,7 +117,7 @@
       </div>
 
       <!-- Disk Usage -->
-      <div class="bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+      <div class="card p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
         <div class="flex justify-between mb-2">
           <h2 class="text-xl font-semibold"><i class="fas fa-hdd mr-2"></i>Disk Usage</h2>
           <span id="diskDetails" class="text-gray-400"></span>
@@ -99,7 +129,7 @@
     </div>
 
     <!-- Processes Table -->
-    <div class="bg-gray-800 p-4 rounded-xl shadow-lg mb-6">
+    <div class="card p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow mb-6">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold"><i class="fas fa-list-ul mr-2"></i>Running Processes</h2>
         <div id="processCount" class="px-3 py-1 bg-gray-700 rounded-full text-sm"></div>
@@ -128,7 +158,7 @@
 
     <!-- Alerts Section -->
     <div id="alertsContainer" class="mb-6 hidden">
-      <div class="bg-red-900/40 border border-red-800 p-4 rounded-xl">
+      <div class="card p-4 rounded-xl shadow-lg hover:shadow-xl transition-shadow bg-red-900/40 border border-red-800">
         <h2 class="text-xl font-semibold mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>System Alerts</h2>
         <ul id="alertsList" class="space-y-2 text-sm">
           <!-- Alerts will be added here -->
@@ -138,7 +168,7 @@
   </div>
 
  <!-- System Info Section (Initially Hidden) -->
-<div id="systemInfoSection" class="bg-[#1e1e2f] p-6 rounded-2xl shadow-xl mb-6 text-white hidden font-sans">
+<div id="systemInfoSection" class="card p-6 rounded-2xl shadow-xl mb-6 text-white hidden font-sans bg-[#1e1e2f]">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-2xl font-bold flex items-center gap-2">
       <i class="fas fa-circle-info text-blue-400"></i> System Information
@@ -149,7 +179,7 @@
   </div>
 
   <div id="systemInfoContent" class="space-y-5 text-sm text-gray-200">
-    <div class="bg-[#2a2a3d] p-4 rounded-xl">
+    <div class="card p-4 rounded-xl bg-[#2a2a3d]">
       <h4 class="text-blue-300 font-semibold mb-2">System</h4>
       <div class="grid grid-cols-2 gap-y-2">
         <div>Platform:</div><div id="siPlatform" class="font-mono text-right">-</div>
@@ -158,7 +188,7 @@
       </div>
     </div>
 
-    <div class="bg-[#2a2a3d] p-4 rounded-xl">
+    <div class="card p-4 rounded-xl bg-[#2a2a3d]">
       <h4 class="text-green-300 font-semibold mb-2">CPU</h4>
       <div class="grid grid-cols-2 gap-y-2">
         <div>Model:</div><div id="siCpuModel" class="font-mono text-right">-</div>
