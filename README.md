@@ -1,6 +1,6 @@
-📊 Real-Time Process Monitoring Dashboard
+**📊 Real-Time Process Monitoring Dashboard**
 
-1. Project Overview
+**1. Project Overview**
 Goals:
 The primary goal of the Real-Time Process Monitoring Dashboard is to build a system that provides live visualization of crucial system metrics like CPU usage, memory consumption, and process activity. This tool allows system administrators to quickly identify performance bottlenecks, unresponsive processes, or excessive resource consumption, enabling real-time system health diagnostics and responsive management.
 
@@ -17,7 +17,7 @@ Intuitive interface for system administrators to monitor and potentially act on 
 Scope:
 This dashboard focuses on real-time monitoring rather than predictive modeling. It’s designed for viewing live stats and optionally providing actions like process termination. The project combines OS-level data gathering (via Python) with a frontend for real-time updates (HTML + JS), making it both practical and educational in terms of systems programming and web development.
 
-2. Module-Wise Breakdown
+**2. Module-Wise Breakdown**
 The project is modularized into three major components:
 
 🔹 Module 1: Analytics Module (Python Backend)
@@ -35,7 +35,7 @@ Purpose: Bridges the backend and frontend.
 
 Role: Ensures efficient data transfer using a local Flask server (or similar) that serves the HTML and streams data through endpoints.
 
-3. Functionalities
+**3. Functionalities**
 ✅ Real-Time Data Fetching
 Gathers current CPU usage (%), RAM usage, and per-process statistics.
 
@@ -62,7 +62,7 @@ Kill a process directly from the dashboard.
 
 Add filters or sorting options.
 
-4. Technology Stack
+**4. Technology Stack**
 Python 3: Backend logic and system data analytics using psutil.
 
 Flask (or HTTPServer): Serves data as JSON to frontend.
@@ -71,7 +71,7 @@ HTML/CSS/JavaScript: Frontend interface.
 
 AJAX / Fetch API: Handles periodic data polling.
 
-5. Execution Plan
+**5. Execution Plan**
 Set Up Python Backend:
 
 Use psutil to extract CPU, memory, and process info.
@@ -108,7 +108,7 @@ Run stress tests (e.g., open many processes).
 
 Verify responsiveness and update speed.
 
-6. Sample JSON Output from Backend
+**6. Sample JSON Output from Backend**
 json
 Copy
 Edit
@@ -120,12 +120,12 @@ Edit
     {"pid": 5678, "name": "python.exe", "cpu": 18.9, "memory": 155}
   ]
 }
-7. Efficiency Tips
+**7. Efficiency Tips**
 Minimize Polling Rate: Use a 2-3 second interval to balance responsiveness and system overhead.
 
 Optimize JSON Size: Only send top N processes.
 
 Keep UI Light: Avoid excessive DOM manipulation—just update changed elements.
 
-8. Conclusion
+**8. Conclusion**
 This dashboard serves as a lightweight yet effective system monitoring solution. It's perfect for visualizing real-time process states and resource usage, offering insights into system performance at a glance. It also strengthens your understanding of both OS internals and full-stack integration.
