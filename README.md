@@ -1,4 +1,5 @@
 📊 Real-Time Process Monitoring Dashboard
+
 1. Project Overview
 Goals:
 The primary goal of the Real-Time Process Monitoring Dashboard is to build a system that provides live visualization of crucial system metrics like CPU usage, memory consumption, and process activity. This tool allows system administrators to quickly identify performance bottlenecks, unresponsive processes, or excessive resource consumption, enabling real-time system health diagnostics and responsive management.
